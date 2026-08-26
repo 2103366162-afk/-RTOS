@@ -1,0 +1,14 @@
+# 构建产物
+obj/
+Debug/
+*.o
+*.elf
+*.hex
+*.map
+*.lst
+*.d
+*.bin
+*.axf
+
+# IDE 配置
+.mrs/
