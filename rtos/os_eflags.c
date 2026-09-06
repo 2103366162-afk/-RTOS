@@ -7,7 +7,7 @@
 
 #if OS_EFLAGS_EN
 
-/*±£´æÈÎÎñÒªµÈ´ıµÄÎ»µÄĞÅÏ¢*/
+/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½È´ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½Ï¢*/
 typedef struct _os_eflags_wait_t
 {
     int type;
@@ -55,7 +55,7 @@ os_eflags_t * os_eflags_create (os_flags_t init_flags)
 {
     os_param_failed(init_flags < 0,OS_NULL);
 
-    /*·ÖÅäos_eflags_t½á¹¹Ìå*/
+    /*ï¿½ï¿½ï¿½ï¿½os_eflags_tï¿½á¹¹ï¿½ï¿½*/
     os_eflags_t * eflags = os_mem_malloc(sizeof(os_eflags_t));
     if(eflags == OS_NULL)
     {
@@ -97,7 +97,7 @@ os_flags_t os_eflags_wait_bits (os_eflags_t * eflags, int ms, int type, os_flags
 
     os_isr_status_t status =  os_sched_isr_disable();
 
-    /*ÏÈ¼ì²éÒÑÓĞµÄÌõ¼şÊÇ·ñÂú×ã*/ 
+    /*ï¿½È¼ï¿½ï¿½ï¿½ï¿½ï¿½Ğµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½*/ 
     int check_all = type & OS_EFLAGS_ALL;
     if(type & OS_EFLAGS_SET)
     {
@@ -137,14 +137,14 @@ os_flags_t os_eflags_wait_bits (os_eflags_t * eflags, int ms, int type, os_flags
     }
 
 
-    /*Ìõ¼ş²»Âú×ã£¬µ±Ç°ÈÎÎñĞèÒªµÈ´ı*/
+    /*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã£¬ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½È´ï¿½*/
     os_eflags_wait_t task_flags_info = {.mask = mask,.result = 0,.type = type};
     os_event_wait(&eflags->event,&task_flags_info,ms);
     os_sched_isr_enable(status);
     os_sched_run();
-    /*ÈÎÎñ´ÓÕâÀï±»ÇĞ³öÈ¥*/
+    /*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï±»ï¿½Ğ³ï¿½È¥*/
     /*---------------------------*/
-    /*ÈÎÎñ´ÓÕâÀï»ØÀ´£¬·µ»ØÖµ¼ÇÂ¼ÊÇÊÂ¼ş³É¹¦·µ»Ø(OS_ERR_OK)£¬»¹ÊÇ³¬Ê±¶ø·µ»Ø(OS_ERR_EVENT_TIMEOUT)*/
+    /*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½Â¼ï¿½ï¿½ï¿½Â¼ï¿½ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½(OS_ERR_OK)ï¿½ï¿½ï¿½ï¿½ï¿½Ç³ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(OS_ERR_EVENT_TIMEOUT)*/
     os_task_t *self = os_task_self();
     if(p_err != OS_NULL)
     {
@@ -177,17 +177,17 @@ os_err_t os_eflags_set_bits (os_eflags_t * eflags, int type, os_flags_t mask)
         os_task_t * first_task = os_list_first(&eflags->event.wait_list);
         os_eflags_wait_t * task_flags_info = (os_eflags_wait_t *)first_task->event_info.reason;
 
-        /*»ñÈ¡taskµÄÑÚÂëÄÄĞ©Î»ÖÃ1ÁË*/
+        /*ï¿½ï¿½È¡taskï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ©Î»ï¿½ï¿½1ï¿½ï¿½*/
         os_flags_t set_flags = eflags->flags & task_flags_info->mask;
         int check_all = task_flags_info->type & OS_EFLAGS_ALL;
-        /*ÖÃÎ»¼ì²é*/
+        /*ï¿½ï¿½Î»ï¿½ï¿½ï¿½*/
         if(task_flags_info->type & OS_EFLAGS_SET)
         {
-            /*È«²¿¶¼ÖÃ1µÄÇé¿ö ºÍ ÈÎÒâ1Î»¶¼ÖÃ1µÄÇé¿ö*/
+            /*È«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½1Î»ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½*/
             if((check_all && (task_flags_info->mask == set_flags))  || (!check_all && (set_flags != 0)))
             {
-                /*ÉèÖÃÁËÍË³öÊ±Çå³ıÏà¹Ø±êÖ¾£¬°Ñ¶ÔÓ¦µÄÎ»ÖÃ0(1->0),ÕâÀïµÄtype£¬task_flags_info->typeÊÇÔÚÈÎÎños_eflags_wait_bitsÉèÖÃµÄ£¬
-                ÒòÎª»½ĞÑÍêµÚÒ»¸öÔËĞĞÊÇos_eflags_wait_bitsº¯ÊıµÄÎ²²¿ Î²²¿ÊÇÖ±½Óreturn£¬ËùÒÔ¸É´àÔÚ»½ĞÑÇ°½øĞĞÉ¾³ı*/
+                /*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë³ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½Ö¾ï¿½ï¿½ï¿½Ñ¶ï¿½Ó¦ï¿½ï¿½Î»ï¿½ï¿½0(1->0),ï¿½ï¿½ï¿½ï¿½ï¿½typeï¿½ï¿½task_flags_info->typeï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½os_eflags_wait_bitsï¿½ï¿½ï¿½ÃµÄ£ï¿½
+                ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½os_eflags_wait_bitsï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î²ï¿½ï¿½ Î²ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½returnï¿½ï¿½ï¿½ï¿½ï¿½Ô¸É´ï¿½ï¿½Ú»ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½*/
                 if(task_flags_info->type & OS_EFLAGS_EXIT_CLEAR)
                 {
                     temp_flags &= ~set_flags;
@@ -199,13 +199,13 @@ os_err_t os_eflags_set_bits (os_eflags_t * eflags, int type, os_flags_t mask)
                 need_sched= true;
                 continue;
             }
-            /*Çå³ı¼ì²é*/
+            /*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
         }else if (task_flags_info->type & OS_EFLAGS_CLEAR)
         {
             os_flags_t clear_flags =  ~(eflags->flags & task_flags_info->mask);
             if((check_all && (task_flags_info->mask  == clear_flags)) || (!check_all && (clear_flags != 0 )))
             {
-                /*ÉèÖÃÁËÍË³öÊ±Çå³ıÏà¹Ø±êÖ¾£¬°Ñ¶ÔÓ¦µÄÎ»ÖÃ1(0->1)*/
+                /*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë³ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½Ö¾ï¿½ï¿½ï¿½Ñ¶ï¿½Ó¦ï¿½ï¿½Î»ï¿½ï¿½1(0->1)*/
                 if(task_flags_info->type & OS_EFLAGS_EXIT_CLEAR)
                 {
                     temp_flags |= clear_flags; 
@@ -213,19 +213,19 @@ os_err_t os_eflags_set_bits (os_eflags_t * eflags, int type, os_flags_t mask)
             
                 os_event_notify_task(&eflags->event,first_task,OS_NULL,OS_ERR_OK);
 
-                task_flags_info->result = set_flags;
+                task_flags_info->result = clear_flags;
                 need_sched= true;
                 continue;
             }
         }
-        /*Á½¸ö»òÁ½¸öÈÎÎñÒÔÉÏ, first_task²»Âú×ãÌõ¼ş£¬°ÑËüÒÆÈëlistµÄÎ²²¿*/
+        /*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, first_taskï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½listï¿½ï¿½Î²ï¿½ï¿½*/
         if (task_cnt > 1) 
         {
-            os_event_remove_task(&eflags->event, first_task);   // ÒÆ³ö£¬Çå³ıÁË±êÖ¾
-            // ÖØĞÂÉèÖÃÊÂ¼şµÈ´ı±êÖ¾ºÍ event Ö¸Õë
+            os_event_remove_task(&eflags->event, first_task);   // ï¿½Æ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë±ï¿½Ö¾
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½È´ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ event Ö¸ï¿½ï¿½
             first_task->task_flags |= OS_TASK_EVENT_WAIT;
             first_task->event_info.event = &eflags->event;
-            // ²åÈëµ½µÈ´ıÁĞ±íÎ²²¿
+            // ï¿½ï¿½ï¿½ëµ½ï¿½È´ï¿½ï¿½Ğ±ï¿½Î²ï¿½ï¿½
             os_list_insert_last(&eflags->event.wait_list, first_task);
         }
     }
@@ -234,11 +234,11 @@ os_err_t os_eflags_set_bits (os_eflags_t * eflags, int type, os_flags_t mask)
     
     if(need_sched)
     {
-        /*ËäÈ»Ç°Ãæ»½ĞÑÈÎÎñµÄÊ±ºò£¬ÉèÖÃreasonµÄÖµÊÇ0£¬µ«ÊÇÕâÀïÖ»¸Ä±ätask½á¹¹ÌåµÄreasonÖµ£¬È´²»ÊÇ¸Ä±ätask_flags_info½á¹¹ÌåµÄÖµ
-          ºóÃæ·µ»Øµ½»½ĞÑµÄÈÎÎñÊ±£¬²»Í¨¹ıreasonÈ¥·ÃÎÊtask_flags_infoµÄĞÅÏ¢£¬¶øÊÇÔÚÕâ¸öº¯ÊıÀïÃæ£¬ÒÑ¾­Í¨¹ıÖ¸Õë¼ä½ÓĞŞ¸ÄÁËtask_flags_info
-          µÄÖµ£¬·µ»ØÈ¥£¬×Ö½Ú¶ÁÈ¡task_flags_infoµÄ½á¹û¾ÍĞĞ*/
+        /*ï¿½ï¿½È»Ç°ï¿½æ»½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½reasonï¿½ï¿½Öµï¿½ï¿½0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö»ï¿½Ä±ï¿½taskï¿½á¹¹ï¿½ï¿½ï¿½reasonÖµï¿½ï¿½È´ï¿½ï¿½ï¿½Ç¸Ä±ï¿½task_flags_infoï¿½á¹¹ï¿½ï¿½ï¿½Öµ
+          ï¿½ï¿½ï¿½æ·µï¿½Øµï¿½ï¿½ï¿½ï¿½Ñµï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½reasonÈ¥ï¿½ï¿½ï¿½ï¿½task_flags_infoï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ£¬ï¿½Ñ¾ï¿½Í¨ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½Ş¸ï¿½ï¿½ï¿½task_flags_info
+          ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¥ï¿½ï¿½ï¿½Ö½Ú¶ï¿½È¡task_flags_infoï¿½Ä½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
         os_sched_run();
-        /*ÈÎÎñ´ÓÕâÀï±»ÇĞ³öÈ¥*/
+        /*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï±»ï¿½Ğ³ï¿½È¥*/
         /*---------------------------*/
     }
     return OS_ERR_OK;

@@ -60,8 +60,8 @@ os_err_t os_sem_uninit(os_sem_t * sem)
 os_sem_t * os_sem_create (int init_cnt, int max_cnt)
 {
     os_param_failed(init_cnt < 0,OS_NULL);
-    os_param_failed(max_cnt >256 && max_cnt <0,OS_NULL);
-    /*·ÖÅäsem½á¹¹Ìå*/
+    os_param_failed(max_cnt > 255 || max_cnt < 0,OS_NULL);
+    /*ï¿½ï¿½ï¿½ï¿½semï¿½á¹¹ï¿½ï¿½*/
     os_sem_t * sem = os_mem_malloc(sizeof(os_sem_t));
     if(sem == OS_NULL)
     {
@@ -107,27 +107,27 @@ os_err_t os_sem_take (os_sem_t * sem, int ms)
     os_isr_status_t status = os_sched_isr_disable();
     os_task_t *self = os_task_self();
 
-    /* ½ûÖ¹ÔÚÖÐ¶ÏÖÐµ÷ÓÃÈÎÎñ°æ±¾ */
+    /* ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ±¾ */
     if (os_core.os_sched_in_isr_flag > 0) {
         os_sched_isr_enable(status);
         return OS_ERR_ISR;  
     }
 
     if (sem->curr_cnt > 0) {
-        /* ÓÐ¿ÉÓÃÐÅºÅÁ¿£¬³É¹¦»ñÈ¡ */
+        /* ï¿½Ð¿ï¿½ï¿½ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¹ï¿½ï¿½ï¿½È¡ */
         sem->curr_cnt--;
         os_sched_isr_enable(status);
         return OS_ERR_OK;
     }
 
-    /* curr_cnt == 0£¬ÐÅºÅÁ¿²»¿ÉÓÃ */
+    /* curr_cnt == 0ï¿½ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
     if (ms < 0) {
-        /* ·Ç×èÈû»ñÈ¡Ê§°Ü */
+        /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡Ê§ï¿½ï¿½ */
         os_sched_isr_enable(status);
         return OS_ERR_SEM_CNT_ZERO;
     }
 
-    /* ×èÈûµÈ´ý */
+    /* ï¿½ï¿½ï¿½ï¿½ï¿½È´ï¿½ */
     os_event_wait(&sem->event, OS_NULL, ms);
     os_sched_isr_enable(status);
     os_sched_run();   
@@ -140,7 +140,7 @@ os_err_t os_sem_release (os_sem_t * sem)
 
     os_isr_status_t status = os_sched_isr_disable();
 
-    /* ÖÐ¶ÏÖÐ½ûÖ¹µ÷ÓÃ£¬ÇëÊ¹ÓÃ os_sem_release_from_isr */
+    /* ï¿½Ð¶ï¿½ï¿½Ð½ï¿½Ö¹ï¿½ï¿½ï¿½Ã£ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ os_sem_release_from_isr */
     if (os_core.os_sched_in_isr_flag > 0) 
     {
         os_dbg("sem_release in isr");
@@ -162,7 +162,7 @@ os_err_t os_sem_release (os_sem_t * sem)
         return OS_ERR_OK;
     }
 
-    /* ÎÞÈÎÎñµÈ´ý£¬Ôö¼Ó¼ÆÊý */
+    /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¼ï¿½ï¿½ï¿½ */
     if (sem->curr_cnt < sem->max_cnt) 
     {
         sem->curr_cnt++;
@@ -170,7 +170,7 @@ os_err_t os_sem_release (os_sem_t * sem)
         return OS_ERR_OK;
     }
 
-    /* ÒÑÂú */
+    /* ï¿½ï¿½ï¿½ï¿½ */
     os_dbg("sem_release cnt over max_cnt");
     os_sched_isr_enable(status);
 
@@ -180,13 +180,13 @@ os_err_t os_sem_release (os_sem_t * sem)
 /*********************************************************************
  * @fn      os_sem_take_from_isr
  *
- * @brief   ÖÐ¶ÏÖÐ³¢ÊÔ»ñÈ¡ÐÅºÅÁ¿£¨·Ç×èÈû£©
- *          Èç¹ûÐÅºÅÁ¿¼ÆÊý >0£¬Ôò¼õÒ»·µ»Ø OK£»
- *          ·ñÔòÁ¢¼´·µ»Ø´íÎó£¬²»»áµÈ´ý¡£
- *          ²»ÄÜÔÚÖÐ¶ÏÖÐµ÷ÓÃ»á×èÈûµÄ os_sem_take¡£
+ * @brief   ï¿½Ð¶ï¿½ï¿½Ð³ï¿½ï¿½Ô»ï¿½È¡ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ *          ï¿½ï¿½ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ >0ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ OKï¿½ï¿½
+ *          ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½ï¿½ó£¬²ï¿½ï¿½ï¿½È´ï¿½ï¿½ï¿½
+ *          ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ðµï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ os_sem_takeï¿½ï¿½
  *
- * @return  OS_ERR_OK    »ñÈ¡³É¹¦
- *          OS_ERR_SEM_CNT_ZERO  µ±Ç°¼ÆÊýÎª0£¬»ñÈ¡Ê§°Ü
+ * @return  OS_ERR_OK    ï¿½ï¿½È¡ï¿½É¹ï¿½
+ *          OS_ERR_SEM_CNT_ZERO  ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Îª0ï¿½ï¿½ï¿½ï¿½È¡Ê§ï¿½ï¿½
  */
 os_err_t os_sem_take_from_isr (os_sem_t * sem)
 {
@@ -207,12 +207,12 @@ os_err_t os_sem_take_from_isr (os_sem_t * sem)
 /*********************************************************************
  * @fn      os_sem_release_from_isr
  *
- * @brief   ÖÐ¶ÏÖÐÊÍ·ÅÐÅºÅÁ¿£¨·Ç×èÈû£©
- *          Èç¹ûÓÐÈÎÎñÔÚµÈ´ý£¬Ôò»½ÐÑÒ»¸öÈÎÎñ£¨µ«²»Á¢¼´ÇÐ»»£¬ÇÐ»»ÓÉ
- *          os_isr_leave() ´¥·¢£©£»·ñÔò¼ÆÊý+1¡£
+ * @brief   ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ *          ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÚµÈ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ñ£¨µï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½ï¿½ï¿½ï¿½Ð»ï¿½ï¿½ï¿½
+ *          os_isr_leave() ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½+1ï¿½ï¿½
  *
- * @return  OS_ERR_OK              ³É¹¦
- *          OS_ERR_SEM_CNT_OUT     ¼ÆÊýÒÑÂú£¬ÎÞ·¨ÊÍ·Å
+ * @return  OS_ERR_OK              ï¿½É¹ï¿½
+ *          OS_ERR_SEM_CNT_OUT     ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ·ï¿½ï¿½Í·ï¿½
  */
 os_err_t os_sem_release_from_isr (os_sem_t * sem)
 {
@@ -222,18 +222,18 @@ os_err_t os_sem_release_from_isr (os_sem_t * sem)
 
     int cnt = os_event_wait_cnt(&sem->event);
     if (cnt > 0) {
-        /* ÓÐÈÎÎñÔÚµÈ´ý£¬»½ÐÑ¶ÓÊ×ÈÎÎñ */
+        /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÚµÈ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
         os_task_t *task = os_event_notify(&sem->event);
         if (task != OS_NULL) {
             task->event_info.err = OS_ERR_OK;
             task->event_info.reason = OS_NULL;
         }
-        /* ×¢Òâ£ºÕâÀï²»ÄÜµ÷ÓÃ os_sched_run()£¬ÒòÎª ISR ÇÐ»»Í³Ò»ÓÉ os_isr_leave() ´¦Àí */
+        /* ×¢ï¿½â£ºï¿½ï¿½ï¿½ï²»ï¿½Üµï¿½ï¿½ï¿½ os_sched_run()ï¿½ï¿½ï¿½ï¿½Îª ISR ï¿½Ð»ï¿½Í³Ò»ï¿½ï¿½ os_isr_leave() ï¿½ï¿½ï¿½ï¿½ */
         os_sched_isr_enable(status);
         return OS_ERR_OK;
     }
 
-    /* ÎÞÈÎÎñµÈ´ý£¬Ôö¼Ó¼ÆÊý */
+    /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¼ï¿½ï¿½ï¿½ */
     if (sem->curr_cnt < sem->max_cnt) {
         sem->curr_cnt++;
         os_sched_isr_enable(status);

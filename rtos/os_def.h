@@ -154,7 +154,7 @@
 
 /*Èí¼þ¶¨Ê±Æ÷*/
 #ifndef OS_TIMER_EN
-#define OS_TIMER_EN                        0
+#define OS_TIMER_EN                        1
 #define OS_TIMER_INFO_EN                   1
 #define OS_TIMER_DBG_PRINTF_EN             1
 #endif

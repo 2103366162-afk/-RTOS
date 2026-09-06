@@ -44,13 +44,13 @@ static void os_insert_to_men_list(os_men_item_t * men_item)
     {
         if((uint8_t *)high_item >= (uint8_t *)men_item)
         {
-            break;   /* ÕÒµ½µÚÒ»¸öµØÖ·¸ßÓÚÐÂ¿éµÄ½Úµã */
+            break;   /* ï¿½Òµï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½Â¿ï¿½Ä½Úµï¿½ */
         }
     }
 
     if(high_item == OS_NULL)
     {
-        /* ²åÈëµ½Á´±íÄ©Î²£¬³¢ÊÔÓë×îºóÒ»¸öºÏ²¢ */
+        /* ï¿½ï¿½ï¿½ëµ½ï¿½ï¿½ï¿½ï¿½Ä©Î²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ï²ï¿½ */
         os_men_item_t * last_item = os_list_end(&os_core.heap_men.list);
         if(men_item_can_merge(last_item, men_item))
         {
@@ -68,20 +68,20 @@ static void os_insert_to_men_list(os_men_item_t * men_item)
     {
         os_men_item_t * pre_item = os_list_item_pre(&os_core.heap_men.list, high_item);
 
-        /* ============ ÐÞ¸´µã£ºÏÈ±£´æÇ°ÇýµÄÇ°Çý£¬ÔÙÒÆ³ý ============ */
+        /* ============ ï¿½Þ¸ï¿½ï¿½ã£ºï¿½È±ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ³ï¿½ ============ */
         if(pre_item != OS_NULL)
         {
             if(men_item_can_merge(pre_item, men_item))
             {
-                os_men_item_t * pre_pre_item = os_list_item_pre(&os_core.heap_men.list, pre_item);  /* ¢Ù ÒÆ³ýÇ°ÏÈ±£´æ */
+                os_men_item_t * pre_pre_item = os_list_item_pre(&os_core.heap_men.list, pre_item);  /* ï¿½ï¿½ ï¿½Æ³ï¿½Ç°ï¿½È±ï¿½ï¿½ï¿½ */
                 os_list_remove_item(&os_core.heap_men.list, pre_item);
                 men_item_merge(pre_item, men_item);
                 men_item = pre_item;
-                pre_item = pre_pre_item;   /* ¢Ú ÓÃ±£´æµÄÖµ£¬¶ø²»ÊÇ±»Çå¿ÕµÄ½Úµã */
+                pre_item = pre_pre_item;   /* ï¿½ï¿½ ï¿½Ã±ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç±ï¿½ï¿½ï¿½ÕµÄ½Úµï¿½ */
             }
         }
 
-        /* Óë high_item ºÏ²¢ */
+        /* ï¿½ï¿½ high_item ï¿½Ï²ï¿½ */
         if(men_item_can_merge(men_item, high_item))
         {
             os_list_remove_item(&os_core.heap_men.list, high_item);
@@ -104,14 +104,14 @@ static void os_insert_to_men_list(os_men_item_t * men_item)
 
 os_err_t os_men_init(void)
 {
-    /*os_dbgÀïµÄ´ËÊ±ÕâÀïµÄheap_end£¬Ö¸ÔÚheap_memÓÐÐ§µÄ×îºóÒ»¸ö×Ö½ÚµÄµØÖ·£¬²»ÊÇÖ¸½áÊø±ß½çµÄµØÖ·
-      ½áÊø±ß½çµÄµØÖ·Ó¦¸ÃÊÇheap_end +1*/
+    /*os_dbgï¿½ï¿½Ä´ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½heap_endï¿½ï¿½Ö¸ï¿½ï¿½heap_memï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ö½ÚµÄµï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½Äµï¿½Ö·
+      ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½Äµï¿½Ö·Ó¦ï¿½ï¿½ï¿½ï¿½heap_end +1*/
     os_dbg("aliged heap_mem start adder : %x, heap_mem end adder : %x,size: %d\r\n",(int)heap_mem,(int)&heap_mem[OS_MEN_ALLOC_SIZE-1],OS_MEN_ALLOC_SIZE);
-    /*ÆðµãÏò¸ßµØÖ·¶ÔÆë´ËÊ±ÕâÀïµÄheap_start£¬Ö¸ÔÚheap_memÓÐÐ§µÄµÚÒ»¸ö×Ö½ÚµÄµØÖ·£¬²»ÊÇÖ¸¿ªÊ¼±ß½çµÄµØÖ·
-      ¿ªÊ¼±ß½çµÄµØÖ·Ó¦¸ÃÊÇheap_start - 1*/
+    /*ï¿½ï¿½ï¿½ï¿½ï¿½ßµï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½heap_startï¿½ï¿½Ö¸ï¿½ï¿½heap_memï¿½ï¿½Ð§ï¿½Äµï¿½Ò»ï¿½ï¿½ï¿½Ö½ÚµÄµï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½Ê¼ï¿½ß½ï¿½Äµï¿½Ö·
+      ï¿½ï¿½Ê¼ï¿½ß½ï¿½Äµï¿½Ö·Ó¦ï¿½ï¿½ï¿½ï¿½heap_start - 1*/
     uint8_t * heap_start = (uint8_t *)MEN_HIGH_ALIGED(heap_mem,MEN_ALLGN_BYTES);  
-    /*ÖÕµãÏòµÍµØÖ·¶ÔÆë£¬´ËÊ±ÕâÀïµÄheap_end£¬Ö¸ÔÚheap_memÓÐÐ§µÄ×îºóÒ»¸ö×Ö½ÚµÄµØÖ·£¬²»ÊÇÖ¸½áÊø±ß½çµÄµØÖ·
-      ½áÊø±ß½çµÄµØÖ·Ó¦¸ÃÊÇheap_end +1*/
+    /*ï¿½Õµï¿½ï¿½ï¿½Íµï¿½Ö·ï¿½ï¿½ï¿½ë£¬ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½heap_endï¿½ï¿½Ö¸ï¿½ï¿½heap_memï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ö½ÚµÄµï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½Äµï¿½Ö·
+      ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½Äµï¿½Ö·Ó¦ï¿½ï¿½ï¿½ï¿½heap_end +1*/
     uint8_t * heap_end = (uint8_t *)MEN_LOW_ALIGED(heap_mem + OS_MEN_ALLOC_SIZE,MEN_ALLGN_BYTES) -1; 
     
     os_dbg("aliged heap_mem start adder : %x, heap_mem end adder : %x,size: %d\r\n",(int)heap_start,(int)heap_end,(int)(heap_end-heap_start+1));
@@ -121,10 +121,10 @@ os_err_t os_men_init(void)
     os_core.heap_men.heap_statck = heap_start;
     os_core.heap_men.heap_size = heap_end - heap_start +1;
     os_core.heap_men.malloc_count = 0;
-    /*heap_startÒÑ¾­½øÐÐ4×Ö½Ú¶ÔÆë£¬ºóÐø·ÃÎÊfirst_itemÖ¸ÏòµÄÄÚ´æ¾Í²»»á³öÏÖ·Ç4¶ÔÆëµÄµØÖ··ÃÎÊ£¬µ¼ÖÂµÄHardFault*/
+    /*heap_startï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½4ï¿½Ö½Ú¶ï¿½ï¿½ë£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½first_itemÖ¸ï¿½ï¿½ï¿½ï¿½Ú´ï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½4ï¿½ï¿½ï¿½ï¿½Äµï¿½Ö·ï¿½ï¿½ï¿½Ê£ï¿½ï¿½ï¿½ï¿½Âµï¿½HardFault*/
     os_men_item_t * first_item = (os_men_item_t * ) heap_start ;
 
-    /*ÕâÀïµÄdata_sizeÊÇÖ¸¿ÕÏÐ¿éµÄ×Ö½ÚÊý£¬ÊÇ²»°üº¬os_men_item_tµÄ*/
+    /*ï¿½ï¿½ï¿½ï¿½ï¿½data_sizeï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç²ï¿½ï¿½ï¿½ï¿½ï¿½os_men_item_tï¿½ï¿½*/
     os_men_item_init(first_item,OS_MEN_ALLOC_SIZE - OS_MEN_ITEM_SIZE);
     os_list_insert_first(&os_core.heap_men.list,first_item);
     
@@ -150,7 +150,7 @@ void * os_mem_malloc(int size)
     {   
         os_list_remove_item(&os_core.heap_men.list,curr);
         
-        uint16_t remaining_heap_size = curr->data_size - request_size  ;
+        uint32_t remaining_heap_size = curr->data_size - request_size  ;
         
         if(remaining_heap_size > OS_MEN_ITEM_SIZE + OS_MEN_MIN_SIZE )
         {
@@ -158,11 +158,11 @@ void * os_mem_malloc(int size)
             os_men_item_init(Separate_item,remaining_heap_size - OS_MEN_ITEM_SIZE);
             os_insert_to_men_list(Separate_item);
             curr->data_size = request_size;  
-            os_core.heap_men.malloc_count ++;
         }
+        os_core.heap_men.malloc_count ++;
         os_list_item_init(&curr->item,os_men_item_t,item);
         curr->used = 1;
-        /*currºÍOS_MEN_ITEM_SIZE¶¼½øÐÐ4×Ö½Ú¶ÔÆëÁË ËùÒÔfree_start_adderÒ»¶¨ÊÇ4×Ö½Ú¶ÔÆëµÄ*/
+        /*currï¿½ï¿½OS_MEN_ITEM_SIZEï¿½ï¿½ï¿½ï¿½ï¿½ï¿½4ï¿½Ö½Ú¶ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½free_start_adderÒ»ï¿½ï¿½ï¿½ï¿½4ï¿½Ö½Ú¶ï¿½ï¿½ï¿½ï¿½*/
         free_start_adder = (uint8_t *)curr + OS_MEN_ITEM_SIZE;
 
         os_dbg("alloc memory start: %x, input size: %d, allocated size: %d\r\n",(int)free_start_adder,size,curr->data_size);
